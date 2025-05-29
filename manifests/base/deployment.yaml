@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+    app: my-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"        # Request 100 milliCPU
+            memory: "128Mi"    # Request 128 MiB of memory
+          limits:
+            cpu: "250m"        # Limit to 250 milliCPU
+            memory: "256Mi"    # Limit to 256 MiB of memory

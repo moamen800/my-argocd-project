@@ -1,0 +1,15 @@
+# Kustomization file to manage the base manifests
+resources:
+  - deployment.yaml
+  - service.yaml
+
+namePrefix: my-app-
+namespace: my-namespace
+
+commonLabels:
+  app: my-app
+
+images:
+  - name: my-app
+    newName: my-docker-repo/my-app
+    newTag: latest

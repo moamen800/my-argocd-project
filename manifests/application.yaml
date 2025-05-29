@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-application
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: my-namespace
+  source:
+    path: base
+    repoURL: 'https://github.com/your-repo/my-argocd-project.git'
+    targetRevision: HEAD
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+# This is a child ArgoCD Application
+# It deploys the app defined in the base/ directory using Kustomize
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/moamen800/my-argocd-project.git' # Updated repo URL
+    targetRevision: HEAD
+    path: manifests/base
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: my-app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
