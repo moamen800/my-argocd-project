@@ -4,12 +4,13 @@ resources:
   - service.yaml
 
 namePrefix: my-app-
-namespace: my-namespace
+namespace: my-app # ensure namespace is my-app
 
 commonLabels:
   app: my-app
 
-images:
-  - name: my-app
-    newName: my-docker-repo/my-app
-    newTag: latest
+# Remove images section if not needed, or update image name/tag if required
+# images:
+#   - name: my-app
+#     newName: my-docker-repo/my-app
+#     newTag: latest
