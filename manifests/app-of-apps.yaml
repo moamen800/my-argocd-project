@@ -1,20 +1,21 @@
 # This is the parent ArgoCD Application (App of Apps)
-# It manages other Application manifests in this directory
+# It manages other Application manifests in this directory, allowing you to bootstrap multiple apps at once.
+# When you apply this, ArgoCD will look for child Application manifests (like application.yaml) in the manifests/ directory.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: app-of-apps
-  namespace: argocd
+  namespace: argocd # This Application resource lives in the argocd namespace
 spec:
-  project: default
+  project: default # The ArgoCD project this Application belongs to
   source:
-    repoURL: 'https://github.com/moamen800/my-argocd-project.git' # Updated repo URL
-    targetRevision: HEAD
-    path: manifests
+    repoURL: 'https://github.com/moamen800/my-argocd-project.git' # The Git repo containing your manifests
+    targetRevision: HEAD # Use the latest commit on the default branch
+    path: manifests # Look for child Application manifests in the manifests/ directory
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: argocd
+    server: 'https://kubernetes.default.svc' # Deploy to the in-cluster Kubernetes API
+    namespace: argocd # The namespace for the Application resource itself
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: true # Remove resources that are no longer defined in Git
+      selfHeal: true # Automatically fix drift between Git and cluster

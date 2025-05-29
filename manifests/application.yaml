@@ -1,3 +1,9 @@
+# This file contains two ArgoCD Application resources.
+# The first is a sample (misconfigured) application, the second is the main child application managed by the App of Apps.
+
+# ---
+# Sample (misconfigured) Application - not used in your current flow
+# This Application points to a non-existent repo and namespace, so it will show as Unknown in ArgoCD.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -6,34 +12,35 @@ metadata:
 spec:
   destination:
     name: ''
-    namespace: my-namespace
+    namespace: my-namespace # This namespace does not exist
   source:
     path: base
-    repoURL: 'https://github.com/your-repo/my-argocd-project.git'
+    repoURL: 'https://github.com/your-repo/my-argocd-project.git' # Invalid repo URL
     targetRevision: HEAD
   project: default
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+
 ---
-# This is a child ArgoCD Application
-# It deploys the app defined in the base/ directory using Kustomize
+# This is the main child ArgoCD Application managed by the App of Apps
+# It tells ArgoCD to deploy the manifests in manifests/base/ using Kustomize
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: my-app
-  namespace: argocd
+  namespace: argocd # This Application resource lives in the argocd namespace
 spec:
-  project: default
+  project: default # The ArgoCD project this Application belongs to
   source:
-    repoURL: 'https://github.com/moamen800/my-argocd-project.git' # Updated repo URL
-    targetRevision: HEAD
-    path: manifests/base
+    repoURL: 'https://github.com/moamen800/my-argocd-project.git' # The Git repo containing your manifests
+    targetRevision: HEAD # Use the latest commit on the default branch
+    path: manifests/base # Path to the base Kustomize directory
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: my-app
+    server: 'https://kubernetes.default.svc' # Deploy to the in-cluster Kubernetes API
+    namespace: my-app # All resources will be deployed to the my-app namespace
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: true # Remove resources that are no longer defined in Git
+      selfHeal: true # Automatically fix drift between Git and cluster

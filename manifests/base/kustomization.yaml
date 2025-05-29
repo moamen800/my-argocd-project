@@ -1,15 +1,17 @@
-# Kustomization file to manage the base manifests
+# This is a Kustomize configuration file.
+# It tells Kustomize (and ArgoCD) which resources to deploy and how to customize them.
 resources:
-  - deployment.yaml
-  - service.yaml
+  - deployment.yaml # Deploy the Deployment resource
+  - service.yaml    # Deploy the Service resource
 
-namePrefix: my-app-
-namespace: my-app # ensure namespace is my-app
+namePrefix: my-app- # Add this prefix to all resource names (e.g., my-app-my-app)
+namespace: my-app   # All resources will be deployed to the my-app namespace
 
 commonLabels:
-  app: my-app
+  app: my-app # Add this label to all resources for easy selection
 
-# Remove images section if not needed, or update image name/tag if required
+# The images section can be used to override image names/tags if needed.
+# Uncomment and edit if you want to use a custom image.
 # images:
 #   - name: my-app
 #     newName: my-docker-repo/my-app

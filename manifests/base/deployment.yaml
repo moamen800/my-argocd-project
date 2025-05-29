@@ -1,24 +1,26 @@
+# This is a standard Kubernetes Deployment manifest.
+# It describes how to run your application's pods (here, an nginx container) in the cluster.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
+  name: my-app # Name of the Deployment resource
   labels:
-    app: my-app
+    app: my-app # Label used for selecting pods and services
 spec:
-  replicas: 2
+  replicas: 2 # Number of pod replicas to run
   selector:
     matchLabels:
-      app: my-app
+      app: my-app # Select pods with this label
   template:
     metadata:
       labels:
-        app: my-app
+        app: my-app # Label for pods created by this deployment
     spec:
       containers:
-      - name: my-app
-        image: nginx:latest
+      - name: my-app # Name of the container
+        image: nginx:latest # Docker image to use
         ports:
-        - containerPort: 80
+        - containerPort: 80 # Expose port 80 in the container
         resources:
           requests:
             cpu: "100m"        # Request 100 milliCPU

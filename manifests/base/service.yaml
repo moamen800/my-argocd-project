@@ -1,27 +1,14 @@
+# This is a standard Kubernetes Service manifest.
+# It exposes your application inside the cluster so other services or users can access it.
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-argocd-app
-  labels:
-    app: my-argocd-app
-spec:
-  type: ClusterIP
-  ports:
-    - port: 80
-      targetPort: 8080
-  selector:
-    app: my-argocd-app
----
-# This Service exposes the app internally in the cluster
-apiVersion: v1
-kind: Service
-metadata:
-  name: my-app
+  name: my-app # Name of the Service resource
 spec:
   selector:
-    app: my-app
+    app: my-app # Select pods with this label
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: ClusterIP
+      port: 80 # Service port
+      targetPort: 80 # Target port on the pod
+  type: ClusterIP # Expose the service on a cluster-internal IP
